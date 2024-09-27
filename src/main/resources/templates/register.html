@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Register</title>
+</head>
+<body>
+<h1>Register Page</h1>
+<form th:action="@{/register}" th:object="${person}" method="post">
+  <!-- Username -->
+  <div>
+    <label for="username">Username:</label>
+    <input type="text" id="username" th:field="*{username}" required/>
+    <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+  </div>
+
+  <!-- Last Name -->
+  <div>
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" th:field="*{lastName}" required/>
+    <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+  </div>
+
+  <!-- First Name -->
+  <div>
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" th:field="*{firstName}" required/>
+    <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+  </div>
+
+  <!-- Email -->
+  <div>
+    <label for="email">Email:</label>
+    <input type="email" id="email" th:field="*{email}" required/>
+    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+  </div>
+  
+  <!-- Password для валидации на сервере -->
+  <div>
+    <label for="password">Password:</label>
+    <input type="password" id="password" th:field="*{password}" required/>
+    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+  </div>
+
+  <!-- Password для клиентской проверки силы пароля -->
+  <div class="form__field field__password form__field_filled field__valid">
+    <button class="field-type__toggler field-type-password"
+            title="Показать текст пароля" tabindex="2" type="button"
+            onclick="togglePassword()">Показать текст пароля
+    </button>
+
+    <span class="Textinput Textinput_view_one-border Textinput_filled Textinput_size_m">
+        <input type="password" data-t="field:input-password" aria-invalid="false" autocomplete="new-password"
+               class="Textinput-Control" id="password-strength" name="password-strength"
+               oninput="checkPasswordStrength()" required>
+    </span>
+
+      <!--Полоса(бар)-->
+    <label for="password-strength" class="registration__label">Придумайте пароль</label>
+    <div id="password-strength-meter" style="margin-top: 10px;">
+      <div id="password-strength-bar" style="height: 10px; width: 100%; background-color: lightgray;"></div>
+      <p id="password-strength-text" style="margin-top: 5px;"></p>
+    </div>
+  </div>
+
+  <script>
+function checkPasswordStrength() {
+    const password = document.getElementById('password-strength').value;
+    const strengthBar = document.getElementById('password-strength-bar');
+    const strengthText = document.getElementById('password-strength-text');
+
+    let strength = 0;
+
+    // Проверка длины пароля
+    if (password.length >= 6) strength++;
+
+    // Проверка наличия цифры
+    if (/\d/.test(password)) strength++;
+
+    // Проверка наличия буквы
+    if (/[a-zA-Z]/.test(password)) strength++;
+
+    // Проверка наличия специального символа
+    if (/[\W_]/.test(password)) strength++;
+
+    // Обновление полоски и текста
+    if (password.length < 6) {
+        strengthBar.style.backgroundColor = 'red';
+        strengthText.textContent = 'Пароль слишком короткий';
+    } else if (strength === 4) {
+        strengthBar.style.backgroundColor = 'green';
+        strengthText.textContent = 'Надежный пароль';
+    } else {
+        strengthBar.style.backgroundColor = 'orange';
+        strengthText.textContent = 'Простой пароль';
+    }
+}
+
+function togglePassword() {
+    const passwordField = document.getElementById('password-strength');
+    const toggleButton = document.querySelector('.field-type-password');
+    if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        toggleButton.textContent = 'Скрыть текст пароля';
+    } else {
+        passwordField.type = 'password';
+        toggleButton.textContent = 'Показать текст пароля';
+    }
+}
+</script>
+
+
+
+
+  <!-- Date of Birth selection with dropdowns and text inputs -->
+  <div>
+    <label for="dob_month">Select Date of Birth:</label>
+
+    <!-- Month dropdown -->
+    <select id="dob_month" name="dob_month" class="input" required>
+      <option value="0" selected="selected">&nbsp;</option>
+      <option value="1" th:selected="${dob_month == 1}">Январь</option>
+      <option value="2" th:selected="${dob_month == 2}">Февраль</option>
+      <option value="3" th:selected="${dob_month == 3}">Март</option>
+      <option value="4" th:selected="${dob_month == 4}">Апрель</option>
+      <option value="5" th:selected="${dob_month == 5}">Май</option>
+      <option value="6" th:selected="${dob_month == 6}">Июнь</option>
+      <option value="7" th:selected="${dob_month == 7}">Июль</option>
+      <option value="8" th:selected="${dob_month == 8}">Август</option>
+      <option value="9" th:selected="${dob_month == 9}">Сентябрь</option>
+      <option value="10" th:selected="${dob_month == 10}">Октябрь</option>
+      <option value="11" th:selected="${dob_month == 11}">Ноябрь</option>
+      <option value="12" th:selected="${dob_month == 12}">Декабрь</option>
+    </select>
+    <span class="inputGroup-splitter"></span>
+    <!-- Day input -->
+    <input type="text" id="dob_day" class="input" name="dob_day" pattern="\d*" size="4" maxlength="2"
+           aria-label="День" placeholder="День" required th:value="${dob_day}" />
+
+    <span class="inputGroup-splitter"></span>
+
+    <input type="text" id="dob_year" class="input" name="dob_year" pattern="\d*" size="6" maxlength="4"
+           aria-label="Год" placeholder="Год" required th:value="${dob_year}" />
+
+
+    <!-- Вывод ошибки даты, если она есть -->
+    <div th:if="${dateError}" style="color: red;">[[${dateError}]]</div>
+  </div>
+  <div>
+    <div>
+      <button type="submit">Зарегистрироваться</button>
+    </div>
+  </div>
+</form>
+</body>
+</html>
