@@ -20,10 +20,10 @@ public class Person {
     @Column(unique = true)
     private String username;
 
-    @Pattern(regexp = "^[а-яА-Я]+$", message = "LastName can only contain letters")
+    @Pattern(regexp = "^[а-яА-Я]+$", message = "Фамилия должна содержать только кириллицу")
     private String lastName;
 
-    @Pattern(regexp = "^[а-яА-Я]+$", message = "FirstName can only contain letters")
+    @Pattern(regexp = "^[а-яА-Я]+$", message = "Имя должно содержать только кириллицу")
     private String firstName;
 
     @Column(unique = true)
@@ -32,7 +32,6 @@ public class Person {
     @Size(min = 8, max = 20, message = "Password must be between 8 and 20 characters")
     @Pattern(regexp = "^[а-яА-Яa-zA-Z0-9!()?:%]+$" , message = "Пароль должен содержать только буквы, цифры и символы !()?:%")
     private String password;
-
 
     private LocalDate dateOfBirth;
 

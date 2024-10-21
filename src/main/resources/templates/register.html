@@ -4,12 +4,6 @@
 <head>
   <title>Register</title>
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      font-family: Arial, sans-serif;
-      overflow-x: hidden;
-    }
 
     body {
       display: flex;
@@ -72,18 +66,13 @@
   </style>
 </head>
 <body>
-<h1>Register Page</h1>
+<h1>Регистрация</h1>
 <form th:action="@{/register}" th:object="${person}" method="post">
   <!-- Username -->
   <div>
-    <input type="text" id="username" th:field="*{username}" placeholder="Имя пользователя" required/>
-    <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
-  </div>
-
-  <!-- Last Name -->
-  <div>
-    <input type="text" id="lastName" th:field="*{lastName}" placeholder="Фамилия" required/>
-    <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+    <input type="text" id="username" th:field="*{username}" placeholder="Ник пользователя" required/>
+    <!--<div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>-->
+    <div th:if="${usernameError}" th:text="${usernameError}" style="color: red;"></div> <!-- Ошибка username -->
   </div>
 
   <!-- First Name -->
@@ -92,17 +81,35 @@
     <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
   </div>
 
+  <!-- Last Name -->
+  <div>
+    <input type="text" id="lastName" th:field="*{lastName}" placeholder="Фамилия" required/>
+    <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+  </div>
+
   <!-- Email -->
   <div>
     <input type="email" id="email" th:field="*{email}" placeholder="Почта" required/>
-    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+    <div th:if="${emailError}" th:text="${emailError}" style="color: red;"></div> <!-- Ошибка email -->
+    <!--<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>-->
   </div>
+
+  <!-- Date of Birth -->
+  <div>
+    <label for="dob"></label>
+    <input type="text" id="dob" name="dob" th:value="${dob}" placeholder="Дата рождения" maxlength="10" required />
+  </div>
+
+  <script src="/js/dob.js"></script>
+
+  <!-- Вывод ошибки даты, если она есть -->
+  <!--<div th:if="${dateError}" style="color: red;">[[${dateError}]]</div> -->
+  <div th:if="${dateError}" th:text="${dateError}" style="color: red;"></div> <!-- Ошибка даты -->
 
   <!-- Password -->
   <div class="form__field field__password form__field_filled field__valid">
     <button class="field-type__toggler field-type-password"
-            title="Показать/скрыть пароль" tabindex="2" type="button"
-            onclick="togglePassword()">
+            title="Показать/скрыть пароль" tabindex="2" type="button">
       <img id="eye-icon" src="/images/eye-closed-icon.png" alt="Показать пароль" width="20px">
     </button>
 
@@ -120,112 +127,9 @@
     </div>
   </div>
 
-  <script>
-function togglePassword() {
-    const passwordField = document.getElementById('password-strength');
-    const eyeIcon = document.getElementById('eye-icon');
+  <script src="/js/status-bar.js"></script>
+  <script src="/js/toggle-password.js"> </script>
 
-    // Проверяем, что элемент с иконкой глаза существует
-    if (eyeIcon) {
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            // Меняем путь на иконку открытого глаза
-            eyeIcon.src = '/images/eye-open-icon.png';
-            eyeIcon.alt = 'Скрыть пароль';
-        } else {
-            passwordField.type = 'password';
-            // Меняем путь на иконку закрытого глаза
-            eyeIcon.src = '/images/eye-closed-icon.png';
-            eyeIcon.alt = 'Показать пароль';
-        }
-    } else {
-        console.error('Элемент с id="eye-icon" не найден.');
-    }
-}
-</script>
-
-  <script>
-function checkPasswordStrength() {
-    const password = document.getElementById('password-strength').value;
-    const strengthBar = document.getElementById('password-strength-bar');
-    const strengthText = document.getElementById('password-strength-text');
-
-    let strength = 0;
-
-    // Проверка длины пароля
-    if (password.length >= 6) strength++;
-
-    // Проверка наличия цифры
-    if (/\d/.test(password)) strength++;
-
-    // Проверка наличия буквы
-    if (/[a-zA-Z]/.test(password)) strength++;
-
-    // Проверка наличия специального символа
-    if (/[\W_]/.test(password)) strength++;
-
-    // Обновление полоски и текста
-    if (password.length < 6) {
-        strengthBar.style.backgroundColor = 'red';
-        strengthText.textContent = 'Пароль слишком короткий';
-    } else if (strength === 4) {
-        strengthBar.style.backgroundColor = 'green';
-        strengthText.textContent = 'Надежный пароль';
-    } else {
-        strengthBar.style.backgroundColor = 'orange';
-        strengthText.textContent = 'Простой пароль';
-    }
-}
-
-function togglePassword() {
-    const passwordField = document.getElementById('password-strength');
-    const toggleButton = document.querySelector('.field-type-password');
-    if (passwordField.type === 'password') {
-        passwordField.type = 'text';
-        toggleButton.textContent = 'Скрыть текст пароля';
-    } else {
-        passwordField.type = 'password';
-        toggleButton.textContent = 'Показать текст пароля';
-    }
-}
-</script>
-
-  <!-- Date of Birth selection with dropdowns and text inputs -->
-
-  <div>
-    <label for="dob_month"></label>
-    <!-- Month dropdown -->
-    <select id="dob_month" name="dob_month" class="input month-select" required>
-      <option value=""disabled selected></option>
-      <option value="1" th:selected="${dob_month == 1}">Январь</option>
-      <option value="2" th:selected="${dob_month == 2}">Февраль</option>
-      <option value="3" th:selected="${dob_month == 3}">Март</option>
-      <option value="4" th:selected="${dob_month == 4}">Апрель</option>
-      <option value="5" th:selected="${dob_month == 5}">Май</option>
-      <option value="6" th:selected="${dob_month == 6}">Июнь</option>
-      <option value="7" th:selected="${dob_month == 7}">Июль</option>
-      <option value="8" th:selected="${dob_month == 8}">Август</option>
-      <option value="9" th:selected="${dob_month == 9}">Сентябрь</option>
-      <option value="10" th:selected="${dob_month == 10}">Октябрь</option>
-      <option value="11" th:selected="${dob_month == 11}">Ноябрь</option>
-      <option value="12" th:selected="${dob_month == 12}">Декабрь</option>
-    </select>
-  </div>
-    <!-- Day input -->
-    <div>
-      <input type="text" id="dob_day" class="input" name="dob_day" pattern="\d*" size="4" maxlength="2"
-             aria-label="День" placeholder="День" required th:value="${dob_day}" />
-    </div>
-
-
-    <div>
-      <input type="text" id="dob_year" class="input" name="dob_year" pattern="\d*" size="6" maxlength="4"
-             aria-label="Год" placeholder="Год" required th:value="${dob_year}" />
-    </div>
-
-    <!-- Вывод ошибки даты, если она есть -->
-    <div th:if="${dateError}" style="color: red;">[[${dateError}]]</div>
-  </div>
 
   <div>
     <div>
