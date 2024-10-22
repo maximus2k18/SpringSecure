@@ -60,7 +60,7 @@ public class WebController {
             model.addAttribute("dateError", "Неверный формат даты: " + dob);
             return "register"; // Вернуться на страницу с сообщением об ошибке
         }
-        // Сохранение пользователя в бд
+
         try {
             personService.savePerson(person);
         } catch (DataIntegrityViolationException e) {

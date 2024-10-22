@@ -107,16 +107,16 @@
   <div th:if="${dateError}" th:text="${dateError}" style="color: red;"></div> <!-- Ошибка даты -->
 
   <!-- Password -->
-  <div class="form__field field__password form__field_filled field__valid">
+  <div class="form__field field__password form__field_filled field__valid" >
     <button class="field-type__toggler field-type-password"
-            title="Показать/скрыть пароль" tabindex="2" type="button">
+            title="Показать/скрыть пароль" tabindex="2" type="button" >
       <img id="eye-icon" src="/images/eye-closed-icon.png" alt="Показать пароль" width="20px">
     </button>
 
     <span class="Textinput Textinput_view_one-border Textinput_filled Textinput_size_m">
         <input type="password" data-t="field:input-password" aria-invalid="false" autocomplete="new-password"
                class="Textinput-Control" id="password-strength" name="password-strength"
-               oninput="checkPasswordStrength()" required>
+               oninput="checkPasswordStrength()" required placeholder="Пароль">
     </span>
 
     <!-- Полоса(бар) -->
@@ -130,10 +130,14 @@
   <script src="/js/status-bar.js"></script>
   <script src="/js/toggle-password.js"> </script>
 
-
   <div>
     <div>
       <button type="submit">Зарегистрироваться</button>
+    </div>
+  </div>
+  <div>
+    <div>
+      <button type="submit">Войти</button>
     </div>
   </div>
 </form>
