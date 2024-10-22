@@ -20,6 +20,11 @@ import java.time.format.DateTimeParseException;
 @Controller
 public class WebController {
 
+    @GetMapping("/login")
+    public String showLogin() {
+        return "login";
+    }
+
     @GetMapping("/myPage")
     public String showMyPage() {
         return "myPage";
@@ -43,9 +48,13 @@ public class WebController {
     @PostMapping("/register")
     public String registerPerson(
             @RequestParam("dob") String dob,
+            @RequestParam("action") String action,
             @ModelAttribute("person") @Valid Person person,
             BindingResult result, Model model) {
 
+        if (action.equals("login")) {
+            return "redirect:/login"; // Перенаправляем на страницу входа
+        }
         if (result.hasErrors()) {
             model.addAttribute("dob",dob);
             return "register"; //вернуться на страницу, если есть ошибки

@@ -4,7 +4,6 @@
 <head>
   <title>Register</title>
   <style>
-
     body {
       display: flex;
       flex-direction: column;
@@ -63,6 +62,18 @@
     button:hover {
       background-color: #45a049;
     }
+
+    <!--added-->
+
+     .button-container {
+            display: flex; /* Используем Flexbox для выравнивания кнопок */
+            gap: 10px; /* Промежуток между кнопками */
+            margin-top: 15px; /* Отступ сверху для лучшего выравнивания */
+        }
+
+        .button-container button {
+            width: auto; /* Ширина кнопок будет зависеть от их содержимого */
+        }
   </style>
 </head>
 <body>
@@ -130,16 +141,22 @@
   <script src="/js/status-bar.js"></script>
   <script src="/js/toggle-password.js"> </script>
 
-  <div>
-    <div>
-      <button type="submit">Зарегистрироваться</button>
-    </div>
-  </div>
-  <div>
-    <div>
-      <button type="submit">Войти</button>
-    </div>
-  </div>
+
+  <form th:action="@{/register}" method="post">
+    <input type="hidden" name="action" value="register" />
+    <button type="submit">Зарегистрироваться</button>
+  </form>
+
+  <form>
+    <button type="button" onclick="window.location.href='/login'">Войти</button>
+  </form>
+
+
+
 </form>
 </body>
 </html>
+
+<!--  <form>
+    <button type="button" onclick="window.location.href='/login'">Войти</button>
+  </form>-->
