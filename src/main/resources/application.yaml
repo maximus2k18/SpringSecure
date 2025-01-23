@@ -1,9 +1,15 @@
 server:
-  port: 8083
+  port: 8086
 
 spring:
+  thymeleaf:
+    enabled: true
+  freemarker:
+    template-loader-path: classpath:/templates/
+    suffix: .ftl
+    enabled: false
   datasource:
-    url: jdbc:postgresql://localhost:5432/persones
+    url: jdbc:postgresql://localhost:5432/my_database
     username: postgres
     password: 12345
     driver-class-name: org.postgresql.Driver
@@ -17,7 +23,3 @@ spring:
   properties:
     hibernate:
       format_sql: true
-
-
-
-
