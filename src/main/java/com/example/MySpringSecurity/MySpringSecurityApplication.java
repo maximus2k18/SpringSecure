@@ -8,6 +8,6 @@ public class MySpringSecurityApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MySpringSecurityApplication.class, args);
-		System.out.println("LOL");
+		System.out.println("Started");
 	}
 }

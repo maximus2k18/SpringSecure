@@ -4,6 +4,53 @@
 <head>
   <title>Register</title>
   <style>
+
+    .password-container {
+    /*  position: relative;
+      display: inline-block;
+      width: 100%;*/
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .password-container input {
+      /*width: 100%;
+      padding-right: 40px; !* Отступ, чтобы текст не заходил под кнопку *!*/
+
+      width: 100%;
+      padding-right: 40px; /* Оставляем место для кнопки-глазка */
+      height: 40px; /* Добавляем фиксированную высоту для единообразия */
+
+    }
+
+    .password-toggle {
+     /* position: absolute;
+      cursor: pointer;
+      padding: 5px;
+      width: 20px;
+      height: 20px;*/
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      background: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 100%; /* Подстраивает высоту кнопки под input */
+    }
+
+    .password-toggle img {
+      width: 20px;
+      height: 20px;
+    }
+    /*-----------------------*/
+
     body {
       display: flex;
       flex-direction: column;
@@ -12,19 +59,11 @@
       background-color: #f0f0f0;
       padding: 20px;
     }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 24px;
-    }
-
     form {
       border: 1px solid #ccc;
       padding: 20px;
       border-radius: 8px;
       background-color: #fff;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       width: 100%;
       max-width: 400px;
       box-sizing: border-box;
@@ -39,14 +78,8 @@
       padding: 8px;
       box-sizing: border-box;
     }
-
-
     select option:disabled {
-        color: gray; /* Изменяет цвет для отключенных элементов */
-    }
-
-    input::placeholder {
-      color: #999; /* Цвет текста placeholder */
+      color: gray; /* Изменяет цвет для отключенных элементов */
     }
 
     button {
@@ -59,21 +92,6 @@
       width: 100%;
     }
 
-    button:hover {
-      background-color: #45a049;
-    }
-
-    <!--added-->
-
-     .button-container {
-            display: flex; /* Используем Flexbox для выравнивания кнопок */
-            gap: 10px; /* Промежуток между кнопками */
-            margin-top: 15px; /* Отступ сверху для лучшего выравнивания */
-        }
-
-        .button-container button {
-            width: auto; /* Ширина кнопок будет зависеть от их содержимого */
-        }
   </style>
 </head>
 <body>
@@ -113,29 +131,24 @@
 
   <script src="/js/dob.js"></script>
 
-  <!-- Вывод ошибки даты, если она есть -->
-  <!--<div th:if="${dateError}" style="color: red;">[[${dateError}]]</div> -->
-  <div th:if="${dateError}" th:text="${dateError}" style="color: red;"></div> <!-- Ошибка даты -->
+
 
   <!-- Password -->
-  <div class="form__field field__password form__field_filled field__valid" >
-    <button class="field-type__toggler field-type-password"
-            title="Показать/скрыть пароль" tabindex="2" type="button" >
-      <img id="eye-icon" src="/images/eye-closed-icon.png" alt="Показать пароль" width="20px">
+  <div class="password-container">
+    <input type="password" id="password-strength" th:field="*{password}" placeholder="Пароль"
+           autocomplete="new-password" required oninput="checkPasswordStrength()" />
+    <button type="button" class="password-toggle" onclick="togglePassword()">
+      <img id="eye-icon" src="/images/eye-closed-icon.png" alt="Показать пароль">
     </button>
+  </div>
 
-    <span class="Textinput Textinput_view_one-border Textinput_filled Textinput_size_m">
-        <input type="password" data-t="field:input-password" aria-invalid="false" autocomplete="new-password"
-               class="Textinput-Control" id="password-strength" name="password-strength"
-               oninput="checkPasswordStrength()" required placeholder="Пароль">
-    </span>
 
-    <!-- Полоса(бар) -->
-    <label for="password-strength" class="registration__label"></label>
-    <div id="password-strength-meter" style="margin-top: 10px;">
-      <div id="password-strength-bar" style="height: 10px; width: 100%; background-color: lightgray;"></div>
-      <p id="password-strength-text" style="margin-top: 5px;"></p>
-    </div>
+  <!-- Полоса(бар) -->
+  <label for="password-strength" class="registration__label"></label>
+  <div id="password-strength-meter" style="margin-top: 10px;">
+    <div id="password-strength-bar" style="height: 10px; width: 100%; background-color: lightgray;"></div>
+    <p id="password-strength-text" style="margin-top: 5px;"></p>
+  </div>
   </div>
 
   <script src="/js/status-bar.js"></script>
@@ -151,12 +164,6 @@
     <button type="button" onclick="window.location.href='/login'">Войти</button>
   </form>
 
-
-
 </form>
 </body>
 </html>
-
-<!--  <form>
-    <button type="button" onclick="window.location.href='/login'">Войти</button>
-  </form>-->

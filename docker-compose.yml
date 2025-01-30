@@ -1,0 +1,30 @@
+volumes:
+  persones_data:
+
+services:
+  persones:
+    image: postgres
+    restart: always
+    container_name: spring_db_postgresql
+    environment:
+      POSTGRES_DB: persones
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+    volumes:
+      - persones_data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5433:5432"
+      #5433 because of 5432 already used, 5432->5433
+  app:
+    build: .
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://persones:5432/persones
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 12345
+    depends_on:
+      - persones
+
+
+

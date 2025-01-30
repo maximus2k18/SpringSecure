@@ -59,29 +59,36 @@ public class WebController {
             model.addAttribute("dob",dob);
             return "register"; //вернуться на страницу, если есть ошибки
         }
-        // Собираем дату из отдельных частей
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-            LocalDate dateOfBirth = LocalDate.parse(dob, formatter);
-            person.setDateOfBirth(dateOfBirth);
-        }
-        catch (DateTimeParseException e){
-            model.addAttribute("dateError", "Неверный формат даты: " + dob);
-            return "register"; // Вернуться на страницу с сообщением об ошибке
+        // Парсинг даты
+        if (!parseDateOfBirth(dob, person, model)) {
+            return "register"; // Возвращаемся с сообщением об ошибке
         }
 
+        // Сохранение пользователя
         try {
             personService.savePerson(person);
         } catch (DataIntegrityViolationException e) {
-            if (e.getMessage().contains("email")){
+            String errorMessage = e.getRootCause() != null ? e.getRootCause().getMessage() : e.getMessage();
+
+            if (errorMessage.contains("email")) {
                 model.addAttribute("emailError", "Упс, такая почта уже используется!");
-            }
-            if (e.getMessage().contains("username")){
+            } else if (errorMessage.contains("user_name")) {
                 model.addAttribute("usernameError", "Это имя пользователя уже занято!");
             }
-            model.addAttribute("dob", dob); // Чтобы сохранить введенную дату
-            return "register"; // Вернуться на страницу с сообщением об ошибке
+            model.addAttribute("dob", dob); // Сохранение введенной даты
+            return "register"; // Возвращаемся с сообщением об ошибке
         }
         return "redirect:/home";
+    }
+
+    private boolean parseDateOfBirth(String dob, Person person, Model model) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            person.setDateOfBirth(LocalDate.parse(dob, formatter));
+            return true;
+        } catch (DateTimeParseException e) {
+            model.addAttribute("dateError", "Неверный формат даты: " + dob);
+            return false;
+        }
     }
 }
